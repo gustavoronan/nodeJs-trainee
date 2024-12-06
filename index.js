@@ -13,6 +13,22 @@ server.use(express.json()) //função para receber requisições no body de um J
 
 const cursos = ['NodeJS', 'JavaScript', 'PHP']
 
+//Middleware global
+server.use((req, res, next)=>{
+
+    console.log(`URL chamada: ${req.url} metodo: ${req.method}`)
+    return next()
+})
+
+//Middleware em formato de função a ser chamado localmente
+function checkCurso(req, res, next){
+    if (!req.body.name){ //se não houver o nome na requisição
+    return res.status(400).json({message: 'O nome do curso é obrigatório'})
+    }
+
+    return next()
+}
+
 server.get('/curso', (req, res)=>{ //passando a rota /curso, e a funcao que deve ser executada ao acessar a rota
     const nome = req.query.nome // passando para a variavel a requisicao + query
     return res.json({curso: `aprendendo ${nome}`}) //retorno de um json no frontend
@@ -35,7 +51,7 @@ server.get('/cursos', (req, res)=>{
 })
 
 
-server.post('/cursos', (req, res)=>{ //metodo para gerar um post de um novo curso
+server.post('/cursos',checkCurso, (req, res)=>{ //metodo para gerar um post de um novo curso
 
     const { name } = req.body // const name recebe oque for enviado no corpo da requisição, o {name} é a propridade a ser enviada
     cursos.push(name) //enviando name para o array de cursos
