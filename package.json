@@ -1,7 +1,13 @@
 {
   "name": "modulo01",
   "packageManager": "yarn@4.4.1",
+  "scripts": {
+    "dev":"nodemon index.js"
+  },
   "dependencies": {
     "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }
