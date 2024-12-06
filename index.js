@@ -59,7 +59,7 @@ server.post('/cursos',checkCurso, (req, res)=>{ //metodo para gerar um post de u
     return res.json(cursos) //retornando os cursos atualizados
 })
 
-server.put('/cursos/:index', (req, res)=> {
+server.put('/cursos/:index', checkCurso, (req, res)=> {
 
     const {index} =  req.params //recebe cada posição da lista, no parametro vai ser passado a posicao do curso a ser editado
     const {name} = req.body //recebe o novo nome a partir do body
