@@ -29,6 +29,16 @@ function checkCurso(req, res, next){
     return next()
 }
 
+function checkCursoIndex(req,res,next){
+    const indexCurso = cursos[req.params.index] //recebendo o index do curso e setando na const indexCurso
+    
+    if(!indexCurso){
+        return res.status(400).json({message: "Valor index incorreto"})
+    }
+
+    return next()
+}
+
 server.get('/curso', (req, res)=>{ //passando a rota /curso, e a funcao que deve ser executada ao acessar a rota
     const nome = req.query.nome // passando para a variavel a requisicao + query
     return res.json({curso: `aprendendo ${nome}`}) //retorno de um json no frontend
@@ -40,7 +50,7 @@ server.get('/route/:id', (req, res)=>{ //passando a rota /route um id a ser aces
     return res.json({curso: `Curso ${id}`}) //retorno de um json no frontend
 })
 
-server.get('/cursos/:index', (req, res)=>{ //passando a rota /route um index como requisicao
+server.get('/cursos/:index', checkCursoIndex, (req, res)=>{ //passando a rota /route um index como requisicao
     const { index } = req.params //recebendo a requisicao e armazenando na variavel index, de uma forma a usar desentruturação, basicamente acessando o index
     //de uma forma direta pelo req.params, basicamente dizendo: Do objeto req.params, pegue a propriedade chamada index e guarde seu valor na variável index
     return res.json(cursos[index]) //retorno de um json no frontend
@@ -70,7 +80,7 @@ server.put('/cursos/:index', checkCurso, (req, res)=> {
 })
 
 // Define uma rota para deletar um curso específico com base no índice fornecido na URL
-server.delete('/cursos/:index', (req, res) => {
+server.delete('/cursos/:index', checkCursoIndex, (req, res) => {
     // Extrai o parâmetro 'index' da URL usando desestruturação
     const { index } = req.params;
 
